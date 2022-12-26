@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { GalaxyMap } from './GalaxyMap';
+import { GalaxyMap } from './lib/GalaxyMap';
 
 function App() {
   return (
