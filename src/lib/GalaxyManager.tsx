@@ -3,10 +3,10 @@ import Planet from "./Planet";
 import p5Types from "p5";
 
 export default class GalaxyManager {
-    static generateStarFieldCoords(p5: p5Types, maxWidth: number, maxHeight: number, starNum: number) {
+    static generateStarFieldCoords(p5: p5Types, starNum: number) {
         let starFieldCoords: number[][] = [];
         for (let i = 0; i < starNum; i++) {
-            starFieldCoords[i] = [this.getRandomInt(maxWidth), this.getRandomInt(maxHeight)];
+            starFieldCoords[i] = [this.getRandomInt(p5.windowWidth), this.getRandomInt(p5.windowHeight)];
         }
         return starFieldCoords;
     };

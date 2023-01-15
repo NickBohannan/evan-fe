@@ -1,22 +1,31 @@
+
+import { useLayoutEffect } from "react";
 import Sketch from "react-p5";
 import p5Types from "p5"; //Import this for typechecking and intellisense
 import GalaxyManager from "./GalaxyManager";
 import Planet from "./Planet";
+import Galaxy from "./Galaxy";
+import GalaxyWebAPI from "./GalaxyWebAPI";
 
-interface IComponentProps {
-    //Your component props
-}
+interface IComponentProps { }
 
 export const GalaxyMap: React.FC<IComponentProps> = (props: IComponentProps) => {
     let system: StarSystem;
     let starField: number[][];
+    let galaxy: any;
+
+    useLayoutEffect(() => {
+        GalaxyWebAPI.getInitialGalaxy('https://localhost:5001/GenerateGalaxy?starNumber=12').then(res => {
+            galaxy = res;
+        });
+    });
 
     const setup = (p5: p5Types) => {
         system = new StarSystem(p5);
         p5.createCanvas(p5.windowWidth, p5.windowHeight);
         p5.background(0);
         p5.frameRate(30);
-        starField = GalaxyManager.generateStarFieldCoords(p5, p5.windowWidth, p5.windowHeight, 200);
+        starField = GalaxyManager.generateStarFieldCoords(p5, 200);
     };
 
     const draw = (p5: p5Types) => {
@@ -47,12 +56,12 @@ export const GalaxyMap: React.FC<IComponentProps> = (props: IComponentProps) => 
             this.velocity = 0.01;
             this.p5 = p5;
             this.planets = GalaxyManager.generatePlanets(GalaxyManager.getRandomInt(6));
-        }
+        };
 
         drawStar(): void {
             this.p5.fill(200, 0, 0);
             this.p5.ellipse(this.center, this.center, 60, 60);
-        }
+        };
 
         drawPlanets(): void {
             this.planets.forEach(planet => {
@@ -62,7 +71,7 @@ export const GalaxyMap: React.FC<IComponentProps> = (props: IComponentProps) => 
                 this.p5.fill(planet.color);
                 this.p5.ellipse(planet.x, planet.y, 30, 30);
             });
-        }
+        };
 
         drawMoons(): void {
             this.p5.fill(130, 0, 255);
@@ -74,7 +83,7 @@ export const GalaxyMap: React.FC<IComponentProps> = (props: IComponentProps) => 
                     this.p5.ellipse(moon.x, moon.y, moon.diameter, moon.diameter);
                 });
             });
-        }
+        };
     }
 
     return <Sketch setup={setup} draw={draw} />;
